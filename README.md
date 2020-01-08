@@ -12,6 +12,8 @@
 
 ### struct simple
 
+### basic functions
+
 ``` go
 type User struct {
     gourm.Model `table:"xxx" primary_key:"id"` 
@@ -50,5 +52,3 @@ db.Which(&struct, col string, val interface{})
 db.Update(&struct, col string, val interface{})
 
 ```
-
-### basic functions
