@@ -42,6 +42,7 @@ func TestWhich(t *testing.T) {
 	}
 
 	db.Update(nu, "username", nu.Username)
+	// db.Update(nu)
 
 	fmt.Println(nu)
 }

@@ -18,7 +18,7 @@ func (m *Model) Update(uv interface{}, cds ...interface{}) error {
 		if reflect.TypeOf(cds[0]).Kind() != reflect.String {
 			return fmt.Errorf("gourm update: column must be string but => %v", reflect.TypeOf(cds[0]))
 		}
-		q.Where(fmt.Sprintf("%s = '%v'", cds[0], cds[1]))
+		q.Where(fmt.Sprintf("%s = ?", cds[0]), cds[1])
 	} else {
 		return fmt.Errorf("gourm update: update where condition must be 0(use primary key) or 2(column and val)")
 	}
@@ -71,6 +71,7 @@ func (q *queryCondition) DoUpdate(uv interface{}) error {
 	chgstr = strings.Join(chgs, ", ")
 
 	whereConditions := conditions2sentence(q.where)
+	fmt.Println("where: ", whereConditions)
 	sentence := fmt.Sprintf("update %s set %s where %s", tablename, chgstr, strings.Join(whereConditions, ", "))
 
 	_, err := dbConn.Exec(sentence)
