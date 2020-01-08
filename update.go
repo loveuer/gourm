@@ -7,13 +7,19 @@ import (
 	"strings"
 )
 
-func (m *Model) Update(uv interface{}) error {
-	rv := reflect.ValueOf(uv).Elem()
-	primaryKey := getPrimaryKey(rv)
-	primaryVal := getPrimaryVal(rv)
-
+func (m *Model) Update(uv interface{}, cds ...interface{}) error {
 	var q = &queryCondition{}
-	q.Where(fmt.Sprintf("%s = ?", primaryKey), primaryVal)
+	if len(cds) == 0 {
+		rv := reflect.ValueOf(uv).Elem()
+		primaryKey := getPrimaryKey(rv)
+		primaryVal := getPrimaryVal(rv)
+		q.Where(fmt.Sprintf("%s = ?", primaryKey), primaryVal)
+	} else if len(cds) == 2 {
+		q.Where(fmt.Sprintf("%s = '%v'", cds[0], cds[1]))
+	} else {
+		return fmt.Errorf("gourm update: update where condition must be 0(use primary key) or 2(column and val)")
+	}
+
 	return q.DoUpdate(uv)
 }
 
