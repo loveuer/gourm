@@ -1,8 +1,8 @@
 package gourm
 
 import (
+	"fmt"
 	"testing"
-	"time"
 )
 
 type TestStruct struct {
@@ -20,28 +20,28 @@ type Test2Struct struct {
 	Class int    `col:"class"`
 }
 
-// func TestUpdate(t *testing.T) {
-// 	zyp := &TestStruct{ID: 9119, Age: 18}
+type TestUser struct {
+	Model    `table:"sw_user" primary_key:"id"`
+	ID       int    `col:"id"`
+	Username string `col:"username"`
+	Realname string `col:"realname"`
+	Password string `col:"password"`
+}
 
-// 	err := new(DB).Update(zyp)
-// 	err = new(DB).Select("name", "id").Update(zyp)
-// 	err = new(DB).Where("lastlogin = ?", time.Now().Format("2006/01/02 15:04:05")).Select("name").Update(zyp)
-
-// 	if err != nil {
-// 		t.Error(err)
-// 	}
-// }
-
-func TestInsert(t *testing.T) {
-	zyp := &TestStruct{ID: 9, Name: "赵育鹏", Age: 28, LastLogin: time.Now().Format("2006/01/02 15:04:05")}
-	err := new(DB).Insert(zyp)
+func TestWhich(t *testing.T) {
+	db, err := New("postgres", dbsetting, true)
 	if err != nil {
-		t.Error(err)
+		t.Errorf("new db err => %v\n", err)
 	}
 
-	sjp := &Test2Struct{ID: "b23-37-01", Name: "sjp", Admin: 9, Class: 23}
-	err = new(DB).Insert(sjp)
-	if err != nil {
-		t.Error(err)
+	nu := &TestUser{
+		ID:       1,
+		Username: "zhaoyupeng",
+		Realname: "赵育鹏",
+		Password: "1314lalala",
 	}
+
+	db.Update(nu, "username", nu.Username)
+
+	fmt.Println(nu)
 }

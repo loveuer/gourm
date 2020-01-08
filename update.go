@@ -15,6 +15,9 @@ func (m *Model) Update(uv interface{}, cds ...interface{}) error {
 		primaryVal := getPrimaryVal(rv)
 		q.Where(fmt.Sprintf("%s = ?", primaryKey), primaryVal)
 	} else if len(cds) == 2 {
+		if reflect.TypeOf(cds[0]).Kind() != reflect.String {
+			return fmt.Errorf("gourm update: column must be string but => %v", reflect.TypeOf(cds[0]))
+		}
 		q.Where(fmt.Sprintf("%s = '%v'", cds[0], cds[1]))
 	} else {
 		return fmt.Errorf("gourm update: update where condition must be 0(use primary key) or 2(column and val)")
