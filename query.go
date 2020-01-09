@@ -2,7 +2,6 @@ package gourm
 
 import (
 	"fmt"
-	"log"
 	"reflect"
 	"strings"
 )
@@ -167,8 +166,7 @@ func (q *queryCondition) Find(out interface{}) error {
 
 	rows, err := dbConn.Query(sentence)
 	if err != nil {
-		log.Printf("<model><query>dbconn query sentence: %s err: %v\n", sentence, err)
-		return err
+		return fmt.Errorf("gourm query: query sql err => %v", err)
 	}
 
 	onetype := reflect.TypeOf(out).Elem().Elem()

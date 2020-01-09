@@ -2,7 +2,6 @@ package gourm
 
 import (
 	"fmt"
-	"log"
 	"reflect"
 	"strings"
 )
@@ -52,15 +51,14 @@ func (m *Model) Insert(insertRow interface{}) error {
 		primaryAddr := getPrimaryAddr(v)
 		err = row.Scan(primaryAddr)
 		if err != nil {
-			log.Printf("<urm><insert>sentence: (%s) scan err: %v\n", sentence, err)
-			return err
+			return fmt.Errorf("gourm insert: query sql err => %v", err)
 		}
 		return nil
 	} else {
 		_, err := dbConn.Exec(sentence)
 		if err != nil {
-			log.Printf("<urm><insert>sentence: (%s) scan err: %v\n", sentence, err)
+			return fmt.Errorf("gourm insert: exec sql err => %v", err)
 		}
-		return err
+		return nil
 	}
 }

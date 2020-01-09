@@ -2,7 +2,6 @@ package gourm
 
 import (
 	"fmt"
-	"log"
 	"reflect"
 	"strings"
 )
@@ -65,8 +64,8 @@ func (q *queryCondition) DoUpdate(uv interface{}) error {
 
 	_, err := dbConn.Exec(sentence)
 	if err != nil {
-		log.Printf("<urm><update> with sentence: (%s) err: %v\n", sentence, err)
+		return fmt.Errorf("gourm update: exec sql err => %v", err)
 	}
 
-	return err
+	return nil
 }

@@ -47,7 +47,6 @@ func New(sqlType, config string, ping bool) (*DB, error) {
 				if err != nil {
 					log.Fatalf("ping db(%s) err: %v\n", config, err)
 				}
-				log.Println("connect db success")
 				return new(DB), nil
 
 			case <-timer.C:

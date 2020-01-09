@@ -2,7 +2,6 @@ package gourm
 
 import (
 	"fmt"
-	"log"
 	"reflect"
 	"strings"
 )
@@ -44,8 +43,7 @@ func (d *DB) Which(out interface{}, outPrimaryVal ...interface{}) error {
 	row := dbConn.QueryRow(sentence)
 	err := row.Scan(sliceout...)
 	if err != nil {
-		log.Printf("<model><model><Which>scan with sentence: %s err: %v\n", sentence, err)
-		return err
+		return fmt.Errorf("gourm which: query err => %v", err)
 	}
 
 	return nil
