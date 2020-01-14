@@ -164,6 +164,10 @@ func (q *queryCondition) Find(out interface{}) error {
 
 	sentence = fmt.Sprintf("select %s %s", strings.Join(q.selects, ", "), sentence)
 
+	return setVals(out, sentence)
+}
+
+func setVals(out interface{}, sentence string) error {
 	rows, err := dbConn.Query(sentence)
 	if err != nil {
 		return fmt.Errorf("gourm query: query sql err => %v", err)
@@ -173,10 +177,24 @@ func (q *queryCondition) Find(out interface{}) error {
 	for rows.Next() {
 		one := reflect.New(onetype)
 		var oneFields []interface{}
-		for i := 1; i < one.Elem().NumField(); i++ {
-			oneFields = append(oneFields, one.Elem().Field(i).Addr().Interface())
+		selectedCols, err := rows.Columns()
+		if err != nil {
+			return fmt.Errorf("gourm setvals: get selected columns err => %v", err)
 		}
-		rows.Scan(oneFields...)
+
+		fieldnums := one.Elem().NumField()
+		for _, col := range selectedCols {
+			for i := 1; i < fieldnums; i++ {
+				if one.Elem().Type().Field(i).Tag.Get("col") == col {
+					oneFields = append(oneFields, one.Elem().Field(i).Addr().Interface())
+				}
+			}
+		}
+
+		err = rows.Scan(oneFields...)
+		if err != nil {
+			return fmt.Errorf("gourm setvals rows scan err => %v", err)
+		}
 
 		outv := reflect.ValueOf(out).Elem()
 		outv.Set(reflect.Append(outv, one.Elem()))

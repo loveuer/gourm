@@ -43,7 +43,7 @@ func (d *DB) Which(out interface{}, outPrimaryVal ...interface{}) error {
 	row := dbConn.QueryRow(sentence)
 	err := row.Scan(sliceout...)
 	if err != nil {
-		return fmt.Errorf("gourm which: query err => %v", err)
+		return fmt.Errorf("gourm which: scan err => %v", err)
 	}
 
 	return nil
