@@ -40,6 +40,9 @@ func (d *DB) Which(out interface{}, outPrimaryVal ...interface{}) error {
 		sliceout = append(sliceout, rflctVal.Field(i).Addr().Interface())
 	}
 
+	if DEBUG {
+		fmt.Println("sql =>", sentence)
+	}
 	row := dbConn.QueryRow(sentence)
 	err := row.Scan(sliceout...)
 	if err != nil {

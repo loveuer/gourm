@@ -29,13 +29,16 @@ type DB struct {
 var (
 	dbConn *sql.DB
 	err    error
+	DEBUG  bool
 )
 
-func New(sqlType, config string, ping bool) (*DB, error) {
+func New(sqlType, config string, ping bool, debug bool) (*DB, error) {
 	dbConn, err = sql.Open(sqlType, config)
 	if err != nil {
 		return new(DB), err
 	}
+
+	DEBUG = debug
 
 	if ping {
 		ec := make(chan error)

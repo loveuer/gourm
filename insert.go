@@ -47,6 +47,9 @@ func (m *Model) Insert(insertRow interface{}) error {
 
 	if primary != "" {
 		sentence += fmt.Sprintf("returning %s", primary)
+		if DEBUG {
+			fmt.Println("sql =>", sentence)
+		}
 		row := dbConn.QueryRow(sentence)
 		primaryAddr := getPrimaryAddr(v)
 		err = row.Scan(primaryAddr)
@@ -55,6 +58,9 @@ func (m *Model) Insert(insertRow interface{}) error {
 		}
 		return nil
 	} else {
+		if DEBUG {
+			fmt.Println("sql =>", sentence)
+		}
 		_, err := dbConn.Exec(sentence)
 		if err != nil {
 			return fmt.Errorf("gourm insert: exec sql err => %v", err)

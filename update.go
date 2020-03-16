@@ -62,6 +62,9 @@ func (q *queryCondition) DoUpdate(uv interface{}) error {
 	whereConditions := conditions2sentence(q.where)
 	sentence := fmt.Sprintf("update %s set %s where %s", tablename, chgstr, strings.Join(whereConditions, ", "))
 
+	if DEBUG {
+		fmt.Println("sql =>", sentence)
+	}
 	_, err := dbConn.Exec(sentence)
 	if err != nil {
 		return fmt.Errorf("gourm update: exec sql err => %v", err)

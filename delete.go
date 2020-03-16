@@ -1,8 +1,9 @@
 package gourm
 
-import "reflect"
-
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 func (d *DB) Delete(val ...interface{}) error {
 	one := val[0]
@@ -23,10 +24,16 @@ func (d *DB) Delete(val ...interface{}) error {
 		}
 		primaryVal := getPrimaryVal(rflctVal)
 		sentence := fmt.Sprintf("delete from %s where %s = '%v'", tablename, primaryKey, primaryVal)
+		if DEBUG {
+			fmt.Println("sql =>", sentence)
+		}
 		_, err = dbConn.Exec(sentence)
 		return err
 	} else if len(val) == 3 {
 		sentence := fmt.Sprintf("delete from %s where %s = '%v'", tablename, val[1], val[2])
+		if DEBUG {
+			fmt.Println("sql =>", sentence)
+		}
 		_, err = dbConn.Exec(sentence)
 		return err
 	}

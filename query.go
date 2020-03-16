@@ -149,6 +149,9 @@ func (q *queryCondition) Count(out interface{}, col ...string) (int, error) {
 
 	sentence = fmt.Sprintf("select count(%s) %s", countcol, sentence)
 
+	if DEBUG {
+		fmt.Println("sql =>", sentence)
+	}
 	row := dbConn.QueryRow(sentence)
 	var count int
 	err = row.Scan(&count)
@@ -168,6 +171,9 @@ func (q *queryCondition) Find(out interface{}) error {
 }
 
 func setVals(out interface{}, sentence string) error {
+	if DEBUG {
+		fmt.Println("sql =>", sentence)
+	}
 	rows, err := dbConn.Query(sentence)
 	if err != nil {
 		return fmt.Errorf("gourm query: query sql err => %v", err)
